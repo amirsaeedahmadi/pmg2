@@ -1,0 +1,41 @@
+#!/usr/bin/make -f
+# See debhelper(7) (uncomment to enable)
+# output every command that modifies files on the build system.
+#DH_VERBOSE = 1
+
+include /usr/share/dpkg/pkg-info.mk
+
+export PACKAGE=pmg-api
+export PMGVERSION = $(DEB_VERSION_UPSTREAM_REVISION)
+export PMGRELEASE = $(shell echo $(DEB_VERSION_UPSTREAM) | cut -c 1-3)
+
+include debian/rules.env
+export REPOID=${REPOID_GENERATED}
+
+%:
+	dh $@
+
+override_dh_installsystemd:
+	dh_installsystemd --no-start --no-stop-on-upgrade \
+		pmg-hourly.service \
+		pmg-daily.service \
+		pmgspamreport.service \
+		pmgreport.service \
+		pmgnetcommit.service \
+		pmgbanner.service \
+		pmgsync.service
+	dh_installsystemd \
+		pmg-smtp-filter.service \
+		pmgpolicy.service \
+		pmgtunnel.service \
+		pmgmirror.service \
+		pmg-hourly.timer \
+		pmg-daily.timer \
+		pmgspamreport.timer \
+		pmgreport.timer
+	dh_installsystemd --no-enable --name=pmg-pbsbackup@ pmg-pbsbackup@.service
+	# we handle pmgproxy/pmgdaemon manually (use reload instead of restart to keep vnc connection active)
+	dh_installsystemd --no-start --no-stop-on-upgrade pmgdaemon.service pmgproxy.service
+
+override_dh_fixperms:
+	dh_fixperms --exclude /var/log/pmgproxy

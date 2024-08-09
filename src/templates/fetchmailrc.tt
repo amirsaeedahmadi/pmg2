@@ -1,0 +1,23 @@
+# auto-generated using template fetchmailrc.tt
+
+set daemon 300
+set no bouncemail
+
+defaults:
+  antispam -1
+  batchlimit 100
+
+smtphost [% ipconfig.int_ip %]/[% pmg.mail.ext_port %]
+
+# proxmox settings (Do not delete this marker!!)
+[% FOREACH item IN fetchmail_users.list('values') %]
+[% IF item.enable %]poll[% ELSE %]skip[% END -%]
+ [% item.id %] via "[% item.server %]"
+ protocol [% item.protocol %] port [% item.port %]
+[% IF item.interval %] interval [% item.interval %]
+[% END -%]
+ user "[% item.user %]" pass "[% item.pass %]"
+ to "[% item.target %]"
+[% IF item.options %] [% item.options %]
+[% END -%]
+[% END %]

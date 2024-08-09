@@ -1,0 +1,68 @@
+# This is the right place to customize your installation of SpamAssassin.
+#
+# See 'perldoc Mail::SpamAssassin::Conf' for details of what can be
+# tweaked.
+#
+# This file was installed during the installation of SpamAssassin 4.0.0,
+# and contains plugin loading commands for the new plugins added in that
+# release.  It will not be overwritten during future SpamAssassin installs,
+# so you can modify it to enable some disabled-by-default plugins below,
+# if you so wish.
+#
+# There are now multiple files read to enable plugins in the
+# /etc/mail/spamassassin directory; previously only one, "init.pre" was
+# read.  Now both "init.pre", "v310.pre", and any other files ending in
+# ".pre" will be read.  As future releases are made, new plugins will be
+# added to new files, named according to the release they're added in.
+###########################################################################
+
+
+[% IF pmg.spam.extract_text %]
+# ExtractText - Extract text from documents or images for matching
+# informational headers and hits not configured
+loadplugin Mail::SpamAssassin::Plugin::ExtractText
+
+ifplugin Mail::SpamAssassin::Plugin::ExtractText
+
+  extracttext_external  pdftotext  /usr/bin/pdftotext -nopgbrk -layout -enc UTF-8 {} -
+  extracttext_use       pdftotext  .pdf application/pdf
+
+  # http://docx2txt.sourceforge.net
+  extracttext_external  docx2txt   /usr/bin/docx2txt {} -
+  extracttext_use       docx2txt   .docx application/docx
+
+  extracttext_external  antiword   /usr/bin/antiword -t -w 0 -m UTF-8.txt {}
+  extracttext_use       antiword   .doc application/(?:vnd\.?)?ms-?word.*
+
+  extracttext_external  unrtf      /usr/bin/unrtf --nopict {}
+  extracttext_use       unrtf      .doc .rtf application/rtf text/rtf
+
+  extracttext_external  odt2txt    /usr/bin/odt2txt --encoding=UTF-8 {}
+  extracttext_use       odt2txt    .odt .ott application/.*?opendocument.*text
+  extracttext_use       odt2txt    .sdw .stw application/(?:x-)?soffice application/(?:x-)?starwriter
+
+  extracttext_external  tesseract  {OMP_THREAD_LIMIT=1} /usr/bin/tesseract -c page_separator= {} -
+  extracttext_use       tesseract  .jpg .png .bmp .tif .tiff image/(?:jpeg|png|x-ms-bmp|tiff)
+
+endif
+
+[% END %]
+
+
+[% IF pmg.spam.rbl_checks %]
+# DecodeShortUrl - Check for shortened URLs
+#
+# Note that this plugin will send HTTP requests to different URL shortener
+# services.  Enabling caching is recommended, see plugin documentation.
+#
+loadplugin Mail::SpamAssassin::Plugin::DecodeShortURLs
+url_shortener_cache_type dbi
+url_shortener_cache_dsn dbi:SQLite:dbname=/var/lib/pmg/decode_short_urls.db
+[% END %]
+
+# DMARC - Check DMARC compliance
+#
+# Requires Mail::DMARC module and working SPF and DKIM Plugins.
+#
+loadplugin Mail::SpamAssassin::Plugin::DMARC
+

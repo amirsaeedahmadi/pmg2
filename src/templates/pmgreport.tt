@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Proxmox Status Report - [% date %] ([% fqdn %])</title>
+<style>
+
+table {
+width: 500px;
+}
+
+table tr:nth-child(even) {
+background-color: #eee;
+}
+
+table tr:nth-child(odd) {
+background-color: #fff;
+}
+
+table, th, td {
+border: 1px solid black;
+border-collapse: collapse;
+}
+
+</style>
+</head>
+<body>
+
+  [% IF cluster %]
+  <h2>Cluster Status</h2>
+  <table>
+    <tr>
+      <th>Hostname</th>
+      <th>IP Address</th>
+      <th>Role</th>
+      <th>State</th>
+      <th>Load</th>
+      <th>Memory</th>
+      <th>Disk</th>
+    </tr>
+    [% FOREACH item IN cluster %]
+    <tr>
+      <td>[% item.hostname %]</td>
+      <td>[% item.ip %]</td>
+      <td>[% item.type %]</td>
+      <td>[% item.state %]</td>
+      <td>[% item.loadavg1 %]</td>
+      <td>[% item.memory %]</td>
+      <td>[% item.disk %]</td>
+    </tr>
+    [% END %]
+  </table>
+  [% END %]
+
+  [% IF system %]
+  <h2>System Status</h2>
+  <table>
+    [% FOREACH item IN system %]
+    <tr>
+      <td>[% item.text %]</td>
+      <td style="width:150px;">[% item.value %]</td>
+    </tr>
+    [% END %]
+  </table>
+  [% END %]
+
+  [% IF incoming %]
+  <h2>Incoming Mails (24 hours)</h2>
+  <table>
+    [% FOREACH item IN incoming %]
+    <tr>
+      <td>[% item.text %][% IF item.percentage.defined %] ([% item.percentage %]%)[% END %]</td>
+      <td style="width:150px;">[% item.value %]</td>
+    </tr>
+    [% END %]
+  </table>
+  [% END %]
+
+  [% IF outgoing %]
+  <h2>Outgoing Mails (24 hours)</h2>
+  <table>
+    [% FOREACH item IN outgoing %]
+    <tr>
+      <td>[% item.text %][% IF item.percentage.defined %] ([% item.percentage %]%)[% END %]</td>
+      <td style="width:150px;">[% item.value %]</td>
+    </tr>
+    [% END %]
+  </table>
+  [% END %]
+
+  [% IF virusstat %]
+  <h2>Virus Charts (Top 10)</h2>
+  <table>
+    <tr>
+      <th>Virus Name</th>
+      <th>Count</th>
+    </tr>
+    [% FOREACH item IN virusstat %]
+    <tr>
+      <td>[% item.name %]</td>
+      <td style="width:150px;">[% item.count %]</td>
+    </tr>
+    [% END %]
+  </table>
+  [% END %]
+
+  [% IF virusquar %]
+  <h2>Virus Quarantine</h2>
+  <table>
+    [% FOREACH item IN virusquar %]
+    <tr>
+      <td>[% item.text %]</td>
+      <td style="width:150px;">[% item.value %]</td>
+    </tr>
+    [% END %]
+  </table>
+  [% END %]
+
+  [% IF spamquar %]
+  <h2>Spam Quarantine</h2>
+  <table>
+    [% FOREACH item IN spamquar %]
+    <tr>
+      <td>[% item.text %]</td>
+      <td style="width:150px;">[% item.value %]</td>
+    </tr>
+    [% END %]
+  </table>
+  [% END %]
+
+</body>
+</html>

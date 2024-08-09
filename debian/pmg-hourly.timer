@@ -1,0 +1,9 @@
+[Unit]
+Description=Hourly Proxmox Mail Gateway activities
+
+[Timer]
+OnCalendar=hourly
+Persistent=true     
+
+[Install]
+WantedBy=timers.target

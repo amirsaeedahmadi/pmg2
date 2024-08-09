@@ -1,0 +1,1691 @@
+pmg-api (8.1.2) bookworm; urgency=medium
+
+  * pmgdb: dump: replace 'active' flag with 'rules' option, which is a
+    enumeration for 'all', 'active', or 'inactive' to avoid confusion about
+    possible combinations.
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 27 Feb 2024 17:03:21 +0100
+
+pmg-api (8.1.1) bookworm; urgency=medium
+
+  * api: nodes: fix missing import for PVE::Tools helper package
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 26 Feb 2024 21:30:30 +0100
+
+pmg-api (8.1.0) bookworm; urgency=medium
+
+  * fix #5189: cluster: avoid sync errors for statistics and quarantine due to
+    existing data on fresh nodes, which can happen, for example, when
+    restoring a backup.
+
+  * pmgdb dump:
+    - print the type of an object to better differentiate, e.g., an domain
+       entry from a regex entry with the same value.
+    - better highlight active rules over inactive ones
+    - drop "found" prefixes for each rule and group as that conveyed little
+      information, still clutters the output.
+    - add `active` CLI options to control if only active rules should be
+      printed
+
+  * quarantine: sort the per-user want- and block-lists entries when saving
+    them to the DB
+
+  * postfix template: update to current default setting (name) for the SMTP
+    Smuggling vulnerability  in postfix version 3.7.10 and newer.
+
+  * api: tracking center: drop timezone offset as new log-tracker does time
+    calculations directly in UTC
+
+  * fix #2971: DKIM: Add a setting to specify whether to use the from-header
+    for signing instead of the current default envelope-from-address.
+
+  * api: node status: return structured info about current kernel
+
+  * api: node status: return info about current boot mode
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 26 Feb 2024 20:26:57 +0100
+
+pmg-api (8.0.12) bookworm; urgency=medium
+
+  * fix #4818: utils: don't require minimum length for username
+
+  * fix #4811: rule db: test regex validity on submit
+
+  * system report: add content of /etc/pmg/dkim/domains
+
+  * rule cache: reorganize how we gather marks and spaminfo and unnecessary
+    copying of marks
+
+  * smtp-filter: log pre-fork worker settings on start-up
+
+  * config: rework heurisitic for calculating the maximzm smtp-filter process
+    workers to better reflect modern setups w.r.t. total system memory
+
+  * add objectgroup and rule attributes for 'and' and 'invert' logical
+    operators
+
+  * rule cache: implement 'and' and 'invert' for the 'when', 'from', 'to' and
+    what objects
+
+  * pmg-smtp-filter: rename proxtest.com to pmg.example in demo code paths to
+    avoid potential name squatting
+
+  * database: use foreign keys for rule and object group attributes
+
+  * fix #4392: keep empty user blocklist and wantlist in the database to
+    ensure they get synced correctly to other nodes
+
+  * templates: postfix: set same timeouts for before and after-queue (10
+    minutes)
+
+  * config: postfix: make smtp-filter-timeout configurable
+
+  * fix #2606: ruledb disclaimer: add ability to set position to start or end
+
+  * fix #2430: ruledb disclaimer: make adding the separator configurable
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 22 Feb 2024 17:26:12 +0100
+
+pmg-api (8.0.11) bookworm; urgency=medium
+
+  * fix invalid whitespaces in master.cf template introduced in 8.0.10
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 02 Jan 2024 12:53:36 +0100
+
+pmg-api (8.0.10) bookworm; urgency=medium
+
+  * address smtp-smuggling vulnerability (CVE-2023-51764) with the fix
+    recommended by postfix upstream by disallowing bare linefeeds, except from
+    internal sources, requires postfix version 3.7.9-0+deb12u1 to take effect
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 02 Jan 2024 11:51:22 +0100
+
+pmg-api (8.0.9) bookworm; urgency=medium
+
+  * implement "SMTP-smuggling" mitigation for external port - see
+    https://www.postfix.org/smtp-smuggling.html for details
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 22 Dec 2023 11:16:42 +0100
+
+pmg-api (8.0.8) bookworm; urgency=medium
+
+  * fix #4944: api/pbs remote: Add a port config
+
+  * user quarantine: use raw pmail for ticket assembly
+
+  * reduce the logging level of certain messages
+
+  * apt: use `apt changelog` for changelog fetching
+
+  * api/cli: acme: add eab parameters
+
+  * api: acme: deprecate tos endpoint in favor of new meta endpoint
+  * api: quarantine: include descriptions for KAM rules in the spaminfo
+
+  * pmg7to8: Add check for dkms modules
+
+  * pmg7to8: check for proper grub meta-package for bootmode
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 20 Dec 2023 10:58:29 +0100
+
+pmg-api (8.0.7) bookworm; urgency=medium
+
+  * handle pve-kernel -> proxmox-kernel rename
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 01 Aug 2023 11:53:07 +0200
+
+pmg-api (8.0.6) bookworm; urgency=medium
+
+  * cluster: fingerprint parsing: adapt to changed openssl output
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 25 Jul 2023 11:32:42 +0200
+
+pmg-api (8.0.5) bookworm; urgency=medium
+
+  * cluster config: restrict slurp scope to avoid issue parsing network
+    interfaces
+
+  * pmg7to8: notify about unmodified templates
+
+  * system report: skip irrelevant files in /etc/pmg/templates
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 11 Jul 2023 17:53:49 +0200
+
+pmg-api (8.0.4) bookworm; urgency=medium
+
+  * fix #4815: pmgsh: fix calling the api paths directly
+
+  * statistics: fix syntax of SQL query for virus info counter update
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 03 Jul 2023 12:42:23 +0200
+
+pmg-api (8.0.3) bookworm; urgency=medium
+
+  * pmgpolicy, pmg-smtp-filter: set sensible PATH to ensure that standard
+    system binaries can be executed even if just their base name is used.
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 28 Jun 2023 17:42:32 +0200
+
+pmg-api (8.0.2) bookworm; urgency=medium
+
+  * make section match more precise when hard-coding 'use_bayes' & 'use_awl'
+    properties
+
+  * tell the systemd debhelper to not stop the no-start services on upgrade,
+    avoiding noisy warnings for those with an associated timer and also that
+    any currently running operation of those services gets aborted
+
+  * enable TFA lockout, for the relatively low-entropy TOTP type after 8
+    consecutive tries, for all other types after 1000 consecutive tries, as
+    they have much higher entropy
+
+  * include tfa lock status in user list and add user tfa-unlock endpoint
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 28 Jun 2023 11:12:57 +0200
+
+pmg-api (8.0.1) bookworm; urgency=medium
+
+  * include version metadata again in statically generated pmgcfg module again
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 28 Jun 2023 08:04:50 +0200
+
+pmg-api (8.0.0) bookworm; urgency=medium
+
+  * d/postinst: remove re-generation of unique machine-ID for old ISOs
+
+  * cluster: adapt invocation of rsync for the version in Debian 12 Bookworm
+
+  * postgresql compat: cast results explicitly to integer to cope with
+    PostgreSQL 15 changes where UNIX epochs are returned as float
+
+  * auth: set PAM context to 'proxmox-mailgateway-auth' and set the rhost to
+    the IP address the users connects with, allowing one to limit PAM login to
+    certain networks.
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 27 Jun 2023 18:20:30 +0200
+
+pmg-api (8.0.0~1) bookworm; urgency=medium
+
+  * re-build for Proxmox Mail Gateway 8 based on Debian 12 Bookworm
+
+  * update postgresql dependency to 15
+
+  * postgresql.conf template: drop 'stats_temp_directory' config-setting as it
+    was deprecated by upstream PostgreSQL 14 and removed with 15.
+
+  * explicitly depend on rsyslog for the tracking center, as rsyslog doesn't
+    gets installed by default in Debian 12 Bookworm anymore
+
+  * config: disable awl and bayes by default
+
+  * config: disable advanced statistic filters by default
+
+  * debian/postinst: hard code old default values for 'advfilter',
+    'use_bayes' & 'use_awl' during upgrade to 8.0.0
+
+  * grant 'root' and 'www-data' users respective permissions on public schema
+    for newly created databases
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 26 Jun 2023 17:43:06 +0200
+
+pmg-api (7.3-4) bullseye; urgency=medium
+
+  * ruledb: match field: improve validation of regular expressions on addition,
+    warn for existing invalid ones.
+
+  * d/maintscripts: prevent aborting on errors in some commands
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 02 Jun 2023 10:30:31 +0200
+
+pmg-api (7.3-3) bullseye; urgency=medium
+
+  * config schema: document postfix option for smtputf8 flag
+
+  * quarantine: delete Delivered-To and Return-Path when reinjecting mails,
+    fixing a (unpublished) regression with postfix's forwarding loop detection
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 28 Mar 2023 07:42:19 +0200
+
+pmg-api (7.3-2) bullseye; urgency=medium
+
+  * config schema: extend documentation for options
+
+  * templates: adapt to new path for KAM rules in proxmox-spamassassin
+
+  * report: add `date -R` to general system info section
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 27 Mar 2023 12:59:53 +0200
+
+pmg-api (7.3-1) bullseye; urgency=medium
+
+  * proxy: initialize the theme variable with an empty string
+
+  * smtputf8: keep smtputf8 from incoming postfix, detect for local mail
+
+  * config: make smtputf8 configurable through the API
+
+  * reinject mail: improve error logging
+
+  * quarantine: reuse the reinject local mail helper to profit from some of
+    it's recent improvements like IPv6 or DSN.
+
+  * api: quarantine: decode addresses before delivery/userlisting
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 23 Mar 2023 17:29:01 +0100
+
+pmg-api (7.2-5) bullseye; urgency=medium
+
+  * fix #4536: parse original filenames from gzip files
+
+  * proxy: add support for switching themes
+
+  * ruledb: spam: adapt to spamassassin 4.0.0
+
+  * templates: sync spamassassin templates with 4.0.0 upstream
+
+  * templates: enable DecodeShortUrls for SpamAssassin 4.0.0
+
+  * templates: enable DMARC plugin in v400.pre.in
+
+  * fix #2437: config: Add new tls_inbound_domains postfix map and add API
+    endpoint for managing entries
+
+  * config: warn on parse errors for tls related config files
+
+  * fix #4521: api/tasks: replace upid as filename for task log downloads
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 21 Mar 2023 12:59:25 +0100
+
+pmg-api (7.2-4) bullseye; urgency=medium
+
+  * fix #4410: Remove non-null host bits from CIDR when writing postfix
+    config
+
+  * utils: skip checking headers for non-ascii characters as stop gap to avoid
+    breaking mail flow of a few setups that have smtputf8 disabled in their
+    postfix config (e.g., because their downstream servers do not support this)
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 25 Jan 2023 11:01:14 +0100
+
+pmg-api (7.2-3) bullseye; urgency=medium
+
+  * keep directories in /etc/pmg for inotify when restoring from backup
+
+  * rulecache: sort rules additionally by id
+
+  * fix mailflow if smtputf8 is disabled
+
+  * pmgdb dump: encode ruledata before printing
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 27 Dec 2022 11:17:13 +0100
+
+pmg-api (7.2-2) bullseye; urgency=medium
+
+  * d/control: depend directly on libproxmox-acme-plugins
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 30 Nov 2022 10:46:04 +0100
+
+pmg-api (7.2-1) bullseye; urgency=medium
+
+  * queue administration: try to decode utf8
+
+  * make tasklog downloadable in the PMG backend
+
+  * user accesslists: reword logging and hits for newer SA rule sets
+
+  * user-bl: use custom description of USER_IN_BLOCKLIST consistently
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 29 Nov 2022 15:48:26 +0100
+
+pmg-api (7.1-11) bullseye; urgency=medium
+
+  * fix #3287: add `pmail` parameter to virus and attachment quarantine list to
+    allow one to filter for a specific mail
+
+  * fix #2541 ruledb: encode relevant values as utf-8 in database
+
+  * fix #2465: handle smtputf8 addresses in all but who-objects of the
+    rule-system
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 24 Nov 2022 16:43:19 +0100
+
+pmg-api (7.1-10) bullseye; urgency=medium
+
+  * fix #4006: do not split from header on ', ' for spamreport mails
+
+  * ruledb: modfield: properly handle fields spanning multiple lines
+
+  * ruledb: add deprecation warnings for unused `ReportSpam`, `Attach` and
+    `Counter` actions
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 16 Nov 2022 09:03:52 +0100
+
+pmg-api (7.1-9) bullseye; urgency=medium
+
+  * api: quarantine: allow 'list attachments' endpoint for quarantine users,
+    they can see them in the raw email display already anyway
+
+  * api: quarantine: add 'content-disposition' field to response of 'list
+    attachments' API
+
+  * ruledb: modfield: properly encode field after variable substitution
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 11 Nov 2022 13:48:23 +0100
+
+pmg-api (7.1-8) bullseye; urgency=medium
+
+  * api: apt versions: track proxmox-offline-mirror-helper
+
+  * fix #4269: rule cache: from match: cope with undefined IP
+
+  * rule database: notify: properly en-/decode the mail subject to avoid issues
+    with non-ascii characters, like for example, the reported chinese
+    characters.
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 28 Oct 2022 11:42:15 +0200
+
+pmg-api (7.1-7) bullseye; urgency=medium
+
+  * d/control: recommend proxmox-offline-mirror-helper
+
+  * d/postinst: migrate/update APT auth config
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 14 Sep 2022 13:17:58 +0200
+
+pmg-api (7.1-6) bullseye; urgency=medium
+
+  * subscription: handle missing subscription info
+
+  * fix #3915: remove obsolete /etc/apt/apt.conf.d/75pmgconf
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 08 Sep 2022 15:04:49 +0200
+
+pmg-api (7.1-5) bullseye; urgency=medium
+
+  * add 'allow-subdomains' to webauthn schema
+
+  * subscription: switch to rust, add offline key support
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 6 Sep 2022 10:35:09 +0200
+
+pmg-api (7.1-4) bullseye; urgency=medium
+
+  * rulesystem: matchfield: match all headers not only the first
+
+  * config: avoid adding a specific IPs or networks multiple times to
+    the template variables
+
+  * api: quarantine: load custom rules description so that they show up
+    in the GUI too
+
+  * pmg-daily: avoid short-circuting update of local channels
+
+  * api: apt: switch to common Proxmox::RS::APT::Repositories package
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 13 Jul 2022 11:15:00 +0200
+
+pmg-api (7.1-3) bullseye; urgency=medium
+
+  * fix duplicate 'x-ms-dos-executable' in default 'Dangerous Content' object
+
+  * daily update timer: start already on 01:00 to avoid dst change issue
+
+  * fix #3924: ldap: accept only valid email-address
+
+  * Proxmox Backup Server integration: namespace support
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 16 May 2022 12:20:42 +0200
+
+pmg-api (7.1-2) bullseye; urgency=medium
+
+  * fix #3758: allow empty `to` in noqueue case
+
+  * postfix queue: add 'decode-headers' option for read endpoint
+
+  * http server: pass TLS 1.3 ciphersuites and disable-TLS-1.2/1.3 options if
+    set
+
+  * utils: change working directory to root before executing postgres admin
+    commands, to avoid that restrictions of the current CWD from the user
+    doesn't cause failing the command.
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 03 Feb 2022 11:37:51 +0100
+
+pmg-api (7.1-1) bullseye; urgency=medium
+
+  * rulesystem: limit linelength of disclaimer to 998 bytes
+
+  * fix #3734: scrub CSS 'url' from style tags/attributes if view-images is
+    disabled for the quarantine
+
+  * fix #2795: add support for Delivery Status Notification (DSN)
+
+  * add support for two factor authentication with TOTP, recovery codes and
+    WebAuthn to the admin interface
+
+ -- Proxmox Support Team <support@proxmox.com>  Sun, 28 Nov 2021 21:04:58 +0100
+
+pmg-api (7.0-9) bullseye; urgency=medium
+
+  * fix #2071: RuleDB: ignore duplicate entries for Who objects
+
+  * api: ldap config: sync with the complete config
+
+  * fix #3712: strip any trailing dot from the search-domain when passing it to
+    postifx
+
+  * api: journal: stream the journal data to the client
+
+  * api-daemons: make systemd restart them on-failure
+
+  * api-dameons: set oom-policy to `continue` so that a single (replacable)
+    worker getting OOM-killed does not bring down the whole service
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 24 Nov 2021 19:13:29 +0100
+
+pmg-api (7.0-8) bullseye; urgency=medium
+
+  * api: apt: repos: avoid creating implicit default for enabled
+
+  * api: apt: use pmg-style permission for endpoint schema to allow access to
+    admins that aren't root@pam
+
+  * prefer more flexible get_local_ip where possible, it still prefers the
+    resolved hostname but falls back to configured or active IPs. Especially
+    useful for evaluation and initial (CT template) setups.
+
+  * pmgbanner: retry getting local IP for a bit in case of failure, this should
+    be only relevant for evaluation and initial setups where the hostname may
+    not yet resolve to the primary IP address.
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 20 Sep 2021 08:17:18 +0200
+
+pmg-api (7.0-7) bullseye; urgency=medium
+
+  * pmgversion: do not show packages with residual config as being in an error
+    installation state
+
+  * api: apt versions: add ifupdown(2), libproxmox-acme-* and pmg-i18n to
+    packages included in the version report.
+
+  * api: implement live network reload with ifupdown2
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 19 Jul 2021 09:04:25 +0200
+
+pmg-api (7.0-6) bullseye; urgency=medium
+
+  * fix cluster join when large ssh-rsa keys are setup
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 14 Jul 2021 17:54:03 +0200
+
+pmg-api (7.0-5) bullseye; urgency=medium
+
+  * d/control: recommend ifupdown2 and suggest zfsutils-linux
+
+  * switch enterprise repository over to bullseye
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 14 Jul 2021 11:58:48 +0200
+
+pmg-api (7.0-3) bullseye; urgency=medium
+
+  * acme: handle wildcard dns validation
+
+  * api: apt: add calls for repositories status and basic manegement
+
+  * api: services: return active- and unit-state infos
+
+  * api: services: track chrony service
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 13 Jul 2021 18:42:07 +0200
+
+pmg-api (7.0-2) bullseye; urgency=medium
+
+  * d/postinst: handle static machine-id from ISO 5.0 <= x <= 6.0
+
+  * cluster: fix missing import of helper module
+
+  * config: freshclam: default to incremental downloads
+
+  * utils: fix service alias lookup for service commands and status
+    query
+
+ -- Proxmox Support Team <support@proxmox.com>  Sat, 03 Jul 2021 22:51:12 +0200
+
+pmg-api (7.0-1) bullseye; urgency=medium
+
+  * re-build for Proxmox Mail Gateway 7 based on Debian 11 Bullseye
+
+  * pmgproxy: allow setting LISTEN_IP parameter
+
+  * clamav: remove deprecated SafeBrowsing
+
+  * api: nodes: drop deprecated 'upgrade' option of termproxy
+
+  * TLSPolicy: drop deprecated 'domain' parameter
+
+  * api: quarantine: drop deprecated b/w-list methods, and drop detail
+    statistic methods (replaced by more flexible endpoints in 6.x)
+
+  * update postgresql dependency to version 13
+
+  * greylisting: drop unneeded Host column form cgreylist table
+
+  * api: nodeconfig: validate acme config before writing
+
+  * fix #2013 spamreport: remove ticket if authmode is ldap
+
+  * api: tasks: add 'since', 'until', task-type and 'status' filters
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 28 Jun 2021 15:57:10 +0200
+
+pmg-api (6.4-4) pmg; urgency=medium
+
+  * fix #2228: spam quarantine: automatically deliver on whitelisting and
+    delete on blacklisting a mail
+
+  * acme: allow wildcard domain entries
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 15 Apr 2021 15:19:00 +0200
+
+pmg-api (6.4-3) pmg; urgency=medium
+
+  * fix creating mailqueue spooldirs
+
+  * rephrase backup notification template
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 26 Mar 2021 19:09:41 +0100
+
+pmg-api (6.4-2) pmg; urgency=medium
+
+  * fix #3164: api: quarantine: allow to return spam from all users
+
+  * ensure '/etc/pmg/acme/accounts' directory exists
+
+  * certs: reload postfix to activate new certificate even if TLS config stayed
+    the same
+
+  * cluster: trust both, old and new certificate fingerprint of master during
+    update
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 23 Mar 2021 08:30:22 +0100
+
+pmg-api (6.3-7) pmg; urgency=medium
+
+  * implement Automatic Certificate Management Environment (ACME) for API and
+    SMTP TLS certificates. Allowing one to use providers like Let's Encrypt for
+    deployment and automatic renewal of trusted certificates.
+
+  * cluster: automatically trigger an update of the pinned certificate
+    fingerprint for a node in the cluster configuration on certificate change
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 18 Mar 2021 11:05:17 +0100
+
+pmg-api (6.3-6) pmg; urgency=medium
+
+  * api: spamassassin: read local channels and include them in daily SA
+    update
+
+  * api: statistics: add central API enpoint for details, avoiding
+    issues with certain characters in mail addresses
+
+  * utils: allow / inside email address localpart
+
+  * fix #3154: backup: add include-statistics to Proxmox Backup Server
+
+  * fix #3146: backup: add email notifications
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 05 Mar 2021 22:48:07 +0100
+
+pmg-api (6.3-5) pmg; urgency=medium
+
+  * utils: ignore leading whitespace in SpamAssassin rule description
+
+  * api: termproxy: adapt to newer Proxmox VE and Proxmox Backup Server 'cmd'
+    interface, to stay compatible
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 25 Nov 2020 10:21:49 +0100
+
+pmg-api (6.3-4) pmg; urgency=medium
+
+  * integrate Proxmox Backup Server for automatic configuration backups
+
+  * fix #3098: DKIM: sort domains by length first
+
+  * backup: add Spam Assassin custom score file to backup
+
+  * reinject email: fix connecting for ipv6-only hosts
+
+  * fix #3141: do not split on ', ' for returning the from header
+
+  * allow to enable a user self-service login for the user spam quarantine as
+    opt-in config option
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 18 Nov 2020 19:52:58 +0100
+
+pmg-api (6.2-6) pmg; urgency=medium
+
+  * fix #2785: prefix message-id in attachment-quarantine
+
+  * add logging to disclaimer action
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 23 Sep 2020 09:03:45 +0200
+
+pmg-api (6.2-5) pmg; urgency=medium
+
+  * fix #1976: optionally sort postfix queue result
+
+  * allow to remove subscription
+
+  * make regex test-match case-insensitive, like the real tests
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 04 Jun 2020 16:48:26 +0200
+
+pmg-api (6.2-4) pmg; urgency=medium
+
+  * Mail Tracker: handle before queue status
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 14 May 2020 17:51:25 +0200
+
+pmg-api (6.2-3) pmg; urgency=medium
+
+  * enable policy checking also if only IPv6 greylisting is enabled
+
+  * improve ordering of system services
+
+  * add logrotate config to monthly-rotate pmgproxy.log
+
+  * api tracker: always check that specified 'endtime' is newer than
+    'starttime'
+
+  * improve pmg-system-report with more relevant information
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 24 Apr 2020 19:31:15 +0200
+
+pmg-api (6.1-9) pmg; urgency=medium
+
+  * add new 'Match Archive Filename' What Object
+
+  * use postgres inet functions for greylist matching
+
+  * pmgpolicy: add IPv6 support for greylisting
+
+  * greylist: make netmasks configurable
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 20 Apr 2020 17:37:09 +0200
+
+pmg-api (6.1-8) pmg; urgency=medium
+
+  * pmgqm: warn and exit if running on slave node
+
+  * pmgspamreport: purge before sending reports
+
+  * fix rendering of ipv(4|6) literal lmtp transports
+
+  * fix #1948: allow setting TLS policy for transports
+
+  * add TLS options for lmtp to main.cf template
+
+  * fix #2661: reintroduce LDAPCache->ldap_connect
+
+  * skip writing default ports in spamreports
+
+  * use ucf to handle template overrides
+
+  * freshclam.conf.in: make ScriptedUpdates a variable
+
+  * freshclam.conf.in: remove ReceiveTimeout option
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 14 Apr 2020 10:10:59 +0200
+
+pmg-api (6.1-7) pmg; urgency=medium
+
+  * fix #2622: include all spam levels from the ">= 10 score" bucket in total
+    spam statistic
+
+  * fix #2525: encode notifications in UTF-8
+
+  * check if img tag has actually a 'src' attribute to avoid warnings
+
+  * pmgsh: fix 'help' command
+
+  * api/quarantine: add new white/blacklist deletion API endpoints to allow one
+    to avoid passing addresses in the API path.
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 09 Mar 2020 18:21:55 +0100
+
+pmg-api (6.1-6) pmg; urgency=medium
+
+  * track clamav and postgres package version in versions api call
+
+  * add queue id to pmg-smtp-filter replies for tracking in pmg-log-tracker
+
+  * code cleanup
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 28 Feb 2020 11:30:17 +0100
+
+pmg-api (6.1-5) pmg; urgency=medium
+
+  * fix postfix template for before-queue filtering
+
+  * api2: Network: add vlan-raw-device and vlan-id options
+
+  * ensure compatibility with libpve-http-server-perl
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 29 Jan 2020 21:33:55 +0100
+
+pmg-api (6.1-4) pmg; urgency=medium
+
+  * fix #2438: add support for lmtp delivery to downstream servers
+
+  * api2: network: add bond-primary and MTU option
+
+  * fix #2504: do not overwrite existing DKIM selector key
+
+  * dkim: add selector list api endpoint
+
+  * fix disclaimer encoding for html entities
+
+  * fix #1653: parse ipv6 xforward correctly
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 23 Jan 2020 13:20:15 +0100
+
+pmg-api (6.1-3) pmg; urgency=medium
+
+  * improve browser-cache behavior for updates
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 28 Nov 2019 11:35:53 +0100
+
+pmg-api (6.1-2) pmg; urgency=medium
+
+  * don not add DKIM signature if the DKIMSign module fails to determine the
+    domain for signing
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 22 Nov 2019 12:38:48 +0100
+
+pmg-api (6.1-1) pmg; urgency=medium
+
+  * create pmg-scores.cf unconditionally
+
+  * bump version for Proxmox Mailgateway 6.1
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 19 Nov 2019 11:46:11 +0100
+
+pmg-api (6.0-10) pmg; urgency=medium
+
+  * add support for sending NDRs on Block
+
+  * add support for before queue filtering
+
+  * implement force_restart for cluster sync
+
+  * add SACustom Package and API Calls for custom SpamAssassin scores
+
+  * sync custom spamassassin scores to the cluster slaves
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 15 Nov 2019 13:09:57 +0100
+
+pmg-api (6.0-9) pmg; urgency=medium
+
+  * DKIM-sign outbound mail if configured
+
+  * add DKIM related API endpoints
+
+  * fix #2371: reload pmg-smtp-filter on config change
+
+  * add /etc/pmg/dkim to cluster-sync
+
+  * Quarantine API: extend download call to download whole mails
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 30 Oct 2019 18:31:14 +0100
+
+pmg-api (6.0-8) pmg; urgency=medium
+
+  * add attachment quarantine with API integration
+
+  * fix API result verification for invalid mails
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 22 Oct 2019 07:37:00 +0200
+
+pmg-api (6.0-6) pmg; urgency=medium
+
+  * fix #2224: override reference to openspf.org
+
+  * fix #2360: cluster: reload pmg-smtp-filter on rulechange
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 09 Sep 2019 08:05:52 +0200
+
+pmg-api (6.0-5) pmg; urgency=medium
+
+  * fix mimetypes API
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 28 Aug 2019 14:31:38 +0200
+
+pmg-api (6.0-4) pmg; urgency=medium
+
+  * fix #2324 - improve docs on encrypted archives
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 23 Aug 2019 10:50:42 +0200
+
+pmg-api (6.0-3) pmg; urgency=medium
+
+  * use hmac_sha_256 alogrithm for improved CSRF token security
+
+  * pmgproxy: add link to extjs for pmg-docs' api-viewer
+
+ -- Proxmox Support Team <support@proxmox.com>  Sat, 17 Aug 2019 13:04:52 +0200
+
+pmg-api (6.0-2) pmg; urgency=medium
+
+  * adapt journalctl invocation to changed behavior with new systemd version of
+    Debian Buster and make journal parsing more robust
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 13 Aug 2019 15:48:59 +0200
+
+pmg-api (6.0-1+2) pmg; urgency=medium
+
+  * update PMG sources.list to buster
+
+  * replace deprecated /var/run with /run
+
+  * improve restart on upgrade behaviour
+
+  * Who: Domain: improve speed
+
+  * What: Spam: add uri hits to rule description
+
+  * adapt postgresql.conf template to include current postgres version
+
+  * adapt clamav.conf.in to new upstream version
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 9 Aug 2019 08:58:05 +0200
+
+pmg-api (6.0-1+1) pmg; urgency=medium
+
+  * improve packaging compatibillity with postgres 11 slightly
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 24 Jul 2019 21:11:24 +0200
+
+pmg-api (6.0-1) pmg; urgency=medium
+
+  * bump for Proxmox Mailgateway 6 based on Debian Buster
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 24 Jul 2019 20:48:06 +0200
+
+pmg-api (5.2-6) unstable; urgency=medium
+
+  * fix #2276: restore line format for pmg-log-tracker
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 12 Jul 2019 17:04:59 +0200
+
+pmg-api (5.2-5) unstable; urgency=medium
+
+  * avast: change scan invocation path
+
+  * extended fix #1974: traffic_stat_graph: go through all entries
+
+  * fall back to hostname only if no domain defined
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 01 Jul 2019 17:52:43 +0200
+
+pmg-api (5.2-4) unstable; urgency=medium
+
+  * limit precision of bayes-score in log
+
+  * Drop sa-awl output from pmg-system-report
+
+  * fix #2232: set rulename for default accept
+
+  * pmg config: fix avast scan executable path documentation
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 06 Jun 2019 14:00:49 +0200
+
+pmg-api (5.2-3) unstable; urgency=medium
+
+  * node: add api endpoint for new mini-journalreader
+
+  * allow one to use cidr(6) for passing IP/CIDR to the network api
+
+  * Add rule name to RuleAction logging
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 16 May 2019 13:29:42 +0200
+
+pmg-api (5.2-2) unstable; urgency=medium
+
+  * Fix setresuid to postgres error handling
+
+  * fix #2153: allow "'" in quarantine email addresses
+
+  * log before restarting services on rewrite_config
+
+  * fix #2172: sort mynetworks template var to make postfix config rewrite
+    stable and thus restart less often
+
+  * reload postfix instead of restart on config change
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 18 Apr 2019 13:49:37 +0200
+
+pmg-api (5.2-1) unstable; urgency=medium
+
+  * prepare for new 5.2 release
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 20 Mar 2019 06:59:17 +0100
+
+pmg-api (5.1-7) unstable; urgency=medium
+
+  * pmgversion: be compatible with minimized container installation
+
+  * pmgversion: sort packages
+
+  * better error handling for ldap connect
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 20 Mar 2019 06:51:16 +0100
+
+pmg-api (5.1-6) unstable; urgency=medium
+
+  * fix #2129: allow (some) filters for dnsbl-entry
+
+  * fix #1947: implement starttls for ldap
+
+  * fix #1946: add verify and cafile options for ldap
+
+  * show all errors when we get an ldap connection error
+
+  * add/integrate custom_check
+
+  * pmg-system-report: check for existing sa-awl db
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 18 Mar 2019 07:01:03 +0100
+
+pmg-api (5.1-5) unstable; urgency=medium
+
+  * fix #2093 pmgproxy: read in /etc/default/pmgproxy
+
+  * add dependency on pve-http-server (>= 2.0.12)
+
+  * add pmg report api call for the gui
+
+  * add optional list parameter to quarusers api call
+
+  * close #2075: do not insert empty WL/BL
+
+  * user white/blacklist: allow multiple entries for adding/deleting
+
+  * Quarantine: reuse raw parameter for non htmlmail formatter
+
+  * load mobile ui on mobile user agent on /quarantine
+
+  * improve pmg-email-address regex
+
+  * bsys: add pmg-system-report + manpage to Makefile
+
+  * extend pmgdb dump
+
+  * close #1917: add pmg-system-report command
+
+  * add rule's score to pmg-smtp-filter logline
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 26 Feb 2019 13:02:52 +0100
+
+pmg-api (5.1-4) unstable; urgency=medium
+
+  * fix bug #2035 cluster sync issues with ipv6
+
+  * fix #1974: postscreen_stat_graph: go through all entries
+
+  * fixed some typos in PMG/Config.pm
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 18 Dec 2018 10:24:39 +0100
+
+pmg-api (5.1-3) unstable; urgency=medium
+
+  * fix #1978: always give encoding/collate explicitly when creating db
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 08 Nov 2018 09:53:39 +0100
+
+pmg-api (5.1-2) unstable; urgency=medium
+
+  * do not use 'last' inside do/while
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 03 Oct 2018 12:14:08 +0200
+
+pmg-api (5.1-1) unstable; urgency=medium
+
+  * add API for TLS policy - PMG::API2::DestinationTLSPolicy
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 28 Sep 2018 06:50:24 +0200
+
+pmg-api (5.0-79) unstable; urgency=medium
+
+  * fix #1876: allow node status for admin/manager/auditors
+
+  * fix #1881: increase limit for ids in spam quarantine
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 17 Sep 2018 09:30:55 +0200
+
+pmg-api (5.0-78) unstable; urgency=medium
+
+  * fix bug #1701: implement smarthostport setting
+
+  * fix bug #1649: Allow TLS also on internal SMTP port
+
+  * fix bug #1727: hide details if hide_received is active
+
+  * use 'dailyreport' config
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 12 Sep 2018 06:46:47 +0200
+
+pmg-api (5.0-77) unstable; urgency=medium
+
+  * fix bux #1776: set http_proxy for sa-update
+
+  * statistics: actually calculate day when it is given
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 03 Sep 2018 13:01:41 +0200
+
+pmg-api (5.0-76) unstable; urgency=medium
+
+  * d/control: update pve-common version dependency
+
+  * as we use the new param_mapping functionallity from PVE::CLIHandler
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 10 Jul 2018 10:54:44 +0200
+
+pmg-api (5.0-75) unstable; urgency=medium
+
+  * log email addresses as utf8 (postfix also do that).
+
+  * SMTP.pm: SMTPUTF8 is always passed with "mail" command
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 10 Jul 2018 09:59:45 +0200
+
+pmg-api (5.0-74) unstable; urgency=medium
+
+  * add support for SMTPUTF8 extensions
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 09 Jul 2018 12:50:40 +0200
+
+pmg-api (5.0-73) unstable; urgency=medium
+
+  * Add postfix dnsbl threshold
+
+  * fix spamscore Statistics - correctly compute ratio
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 21 Jun 2018 10:25:09 +0200
+
+pmg-api (5.0-72) unstable; urgency=medium
+
+  * PMG/RuleDB/Notify.pm: allow to use wide UTF-8 characters
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 15 Jun 2018 10:18:48 +0200
+
+pmg-api (5.0-71) unstable; urgency=medium
+
+  * sync_userprefs_db: fix #1797 - fix merge function
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 11 Jun 2018 09:08:52 +0200
+
+pmg-api (5.0-70) unstable; urgency=medium
+
+  * fix bug 1707: use correct units for deferred mail queue (minutes)
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 04 May 2018 12:47:11 +0200
+
+pmg-api (5.0-69) unstable; urgency=medium
+
+  * pmg-smtp-filter.service: set Restart=on-abort
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 04 Apr 2018 10:51:20 +0200
+
+pmg-api (5.0-68) unstable; urgency=medium
+
+  * quarantine actions: allow multiple ids for one action
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 29 Mar 2018 14:18:54 +0200
+
+pmg-api (5.0-67) unstable; urgency=medium
+
+  * implement new 'helpdesk' role
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 22 Mar 2018 11:44:28 +0100
+
+pmg-api (5.0-66) unstable; urgency=medium
+
+  * Fix password change of unix root user
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 12 Mar 2018 14:19:21 +0100
+
+pmg-api (5.0-65) unstable; urgency=medium
+
+  * pmgpolicy: avoid warning about uninitialized value
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 05 Mar 2018 06:42:31 +0100
+
+pmg-api (5.0-64) unstable; urgency=medium
+
+  * fix #1679: do not delete old quarantine mails on cluster creation/join
+
+  * Domain object: avoid warning about uninitialized value
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 02 Mar 2018 06:13:32 +0100
+
+pmg-api (5.0-63) unstable; urgency=medium
+
+  * add support for avast virus scanner
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 21 Feb 2018 10:16:07 +0100
+
+pmg-api (5.0-62) unstable; urgency=medium
+
+  * fix bug #1673: Allow email addresses in transport maps
+
+  * UserConfig: verify: check username vs userid
+
+ -- Proxmox Support Team <support@proxmox.com>  Sat, 17 Feb 2018 10:07:40 +0100
+
+pmg-api (5.0-61) unstable; urgency=medium
+
+  * fix bug #1646: domains - allow to use wildcard domains
+
+  * fix bug # 1639: create /var/lib/pmg/backup
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 01 Feb 2018 11:12:32 +0100
+
+pmg-api (5.0-60) unstable; urgency=medium
+
+  * pmg-daily.timer: use RandomizedDelaySec
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 01 Feb 2018 08:15:05 +0100
+
+pmg-api (5.0-59) unstable; urgency=medium
+
+  * introduce new template var postfix.int_ip
+
+  * fix bug #1643: add port and protocol to spamquarantine config
+
+  * pmg-daily.timer: randomize start time using AccuracySec=5hours
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 31 Jan 2018 14:20:39 +0100
+
+pmg-api (5.0-58) unstable; urgency=medium
+
+  * remove unique constraint from LocalStat(Time)
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 30 Jan 2018 09:05:22 +0100
+
+pmg-api (5.0-57) unstable; urgency=medium
+
+  * PMG::Cluster::sync_statistic_db - correctyl update
+    clusterinfo lastid_CStatistic
+
+  * PMG::Cluster::sync_quarantine_db - skip files generated before
+    cluster was created
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 30 Jan 2018 08:02:10 +0100
+
+pmg-api (5.0-56) unstable; urgency=medium
+
+  * fix bug #1636: correctly track file modification time
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 29 Jan 2018 11:09:33 +0100
+
+pmg-api (5.0-55) unstable; urgency=medium
+
+  * fix ipv6 address quoting for postfix mynetworks
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 26 Jan 2018 07:30:45 +0100
+
+pmg-api (5.0-54) unstable; urgency=medium
+
+  * PMG/Config.pm: allow single address setups (all 1 netmask)
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 24 Jan 2018 13:32:03 +0100
+
+pmg-api (5.0-53) unstable; urgency=medium
+
+  * pmgpolicy: try to detect config changes
+
+  * fix bug #1625 - change default rule priorities
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 23 Jan 2018 10:42:12 +0100
+
+pmg-api (5.0-52) unstable; urgency=medium
+
+  * PMG/RuleDB/Object.pm: fix permissions for role admin
+
+  * PMG/API2/MyNetworks.pm: fix links attribute
+
+  * PMG/API2/Transport.pm: fix links attribute
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 18 Jan 2018 10:17:27 +0100
+
+pmg-api (5.0-51) unstable; urgency=medium
+
+  * pmgcm.pm: implement promote
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 17 Jan 2018 13:09:57 +0100
+
+pmg-api (5.0-50) unstable; urgency=medium
+
+  * PMG/Config.pm: change default email port numbers - We now use port 25
+    for incoming mails. Please verify your setup after updating!
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 16 Jan 2018 14:33:45 +0100
+
+pmg-api (5.0-49) unstable; urgency=medium
+
+  * AccessControl.pm: avoid warning about uninitialized value
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 16 Jan 2018 13:53:31 +0100
+
+pmg-api (5.0-48) unstable; urgency=medium
+
+  * fix #1617: remove regex for matchfield. modfield
+
+  * do not return bindpw over the api
+
+  * let all users read their own user data
+
+  * make ldap info visible for audit users
+
+  * implement pmgcm delete
+
+  * allow admins to reset the rule database
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 12 Jan 2018 11:36:26 +0100
+
+pmg-api (5.0-47) unstable; urgency=medium
+
+  * truncate large mails before passing them to spamassassin
+
+  * reduce default maxspamsize back to 256
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 29 Dec 2017 12:19:09 +0100
+
+pmg-api (5.0-46) unstable; urgency=medium
+
+  * PMG/DBTools.pm: add missing TicketID column to CMSReceivers
+
+  * Quarantine.pm: use new TicketID to indentify mails
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 28 Dec 2017 13:07:52 +0100
+
+pmg-api (5.0-45) unstable; urgency=medium
+
+  * PMG/API2/Quarantine.pm - require parameter pmail for quarantine actions
+
+  * delete_quarantined_mail,deliver_quarantined_mail: add parameter $receiver,
+    correctly update database after mail delivery
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 27 Dec 2017 10:28:05 +0100
+
+pmg-api (5.0-44) unstable; urgency=medium
+
+  * PMG/API2/APT.pm - fix changelog urls
+
+  * disable suspend-to-disk, as it delays boot on systems with root on ZFS
+
+  * pmg-daily: add check for available updates
+
+  * periodically update subscription status
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 21 Dec 2017 08:43:48 +0100
+
+pmg-api (5.0-43) unstable; urgency=medium
+
+  * run postmap after generation postfix main.cf
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 18 Dec 2017 12:46:53 +0100
+
+pmg-api (5.0-42) unstable; urgency=medium
+
+  * PMG/Config.pm: avoid warnings if there is no search domain in resolv.conf
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 18 Dec 2017 12:12:04 +0100
+
+pmg-api (5.0-41) unstable; urgency=medium
+
+  * PMG/Fetchmail.pm - autostart fetchmail service
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 18 Dec 2017 11:33:22 +0100
+
+pmg-api (5.0-40) unstable; urgency=medium
+
+  * PMG/Cluster.pm - rewrite ssh keys after cluster sync
+
+  * bump default maxspamsize to 1M
+
+  * depend on apt-transport-https
+
+  * depend on fetchmail
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 18 Dec 2017 10:28:25 +0100
+
+pmg-api (5.0-39) unstable; urgency=medium
+
+  * install /etc/apt/apt.conf.d/75pmgconf to avoid atomatic kernel removes
+
+  * install /etc/apt/sources.list.d/pmg-enterprise.list
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 14 Dec 2017 11:14:53 +0100
+
+pmg-api (5.0-38) unstable; urgency=medium
+
+  * add API for node reboot/shutdown
+
+  * bin/pmg-hourly: use reload-or-restart to reload pmgpolicy service
+
+  * PMG/DBTools.pm: do not use IF NOT EXISTS bcause it writes debug
+    messages to console
+
+  * PMG/DBTools.pm - use user root to sync database
+
+  * pmgtunnel.pm - fix call to socketfile()
+
+  * debian/control - depend on 'rsync'
+
+  * PMG/CLI/pmgreport.pm - remove greylisted mails from daily report
+
+  * PMG/CLI/pmgdb.pm: generate default locale
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 14 Dec 2017 10:06:42 +0100
+
+pmg-api (5.0-37) unstable; urgency=medium
+
+  * pmgreport: use PMG::API2::Statistics to include postscreen stats
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 12 Dec 2017 09:19:05 +0100
+
+pmg-api (5.0-36) unstable; urgency=medium
+
+  * replace novnc with xtermjs
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 11 Dec 2017 14:48:32 +0100
+
+pmg-api (5.0-35) unstable; urgency=medium
+
+  * rename safe_browsing_score to clamav_heuristic_score
+
+  * use clamav_heuristic_score for heuristics results
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 11 Dec 2017 13:39:06 +0100
+
+pmg-api (5.0-34) unstable; urgency=medium
+
+  * PMG/API2/Statistics.pm - include postscreen stats in mail/mailcount
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 07 Dec 2017 11:27:49 +0100
+
+pmg-api (5.0-33) unstable; urgency=medium
+
+  * bin/pmgpolicy - count PREGREET rejects (postscreen)
+
+  * PMG/API2/Statistics.pm - rename rblcount to rejectcount, include PREGREET
+
+  * depend on: openssh-client, openssh-server, apt
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 07 Dec 2017 07:59:11 +0100
+
+pmg-api (5.0-32) unstable; urgency=medium
+
+  * PMG::DBTool::load_mail_data - add optional $pmail parameter
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 06 Dec 2017 12:19:58 +0100
+
+pmg-api (5.0-31) unstable; urgency=medium
+
+  * PMG/HTMLMail.pm - use global hash to store inlined images
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 06 Dec 2017 06:31:52 +0100
+
+pmg-api (5.0-30) unstable; urgency=medium
+
+  * debian/postinst/prerm - handle pmgproxy/pmgdaemon manually
+    to keep VNC connections during upgrades.
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 05 Dec 2017 14:12:04 +0100
+
+pmg-api (5.0-29) unstable; urgency=medium
+
+  * LDAP: add mailAlternativeAddress to mailattr default
+
+  * PMG/LDAPConfig.pm - register new format ldap-simple-attr
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 05 Dec 2017 12:09:07 +0100
+
+pmg-api (5.0-28) unstable; urgency=medium
+
+  * pmg-smtp-filter: fix safebrowsing hit detection
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 01 Dec 2017 13:17:24 +0100
+
+pmg-api (5.0-27) unstable; urgency=medium
+
+  * do not use .db file for mynetworks
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 01 Dec 2017 10:57:42 +0100
+
+pmg-api (5.0-26) unstable; urgency=medium
+
+  * increase deafult maxspamsize to 512*1024
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 30 Nov 2017 09:56:50 +0100
+
+pmg-api (5.0-25) unstable; urgency=medium
+
+  * templates/local.cf.in: include KAM.cf
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 30 Nov 2017 08:03:39 +0100
+
+pmg-api (5.0-24) unstable; urgency=medium
+
+  * total_mail_stat: return bytes_in/bytes_out in bytes (instead of MBytes)
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 29 Nov 2017 11:37:07 +0100
+
+pmg-api (5.0-23) unstable; urgency=medium
+
+  * avoid repeated SPF headers
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 29 Nov 2017 10:38:16 +0100
+
+pmg-api (5.0-22) unstable; urgency=medium
+
+  * fix network stats
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 28 Nov 2017 15:24:12 +0100
+
+pmg-api (5.0-21) unstable; urgency=medium
+
+  * avoid warning about uninitialized value
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 28 Nov 2017 14:36:12 +0100
+
+pmg-api (5.0-20) unstable; urgency=medium
+
+  * use google safe browsing hits to icrease spam score
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 28 Nov 2017 13:46:13 +0100
+
+pmg-api (5.0-19) unstable; urgency=medium
+
+  * PMG/RuleDB/Notify.pm - avoid use of undefined values
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 28 Nov 2017 12:19:21 +0100
+
+pmg-api (5.0-18) unstable; urgency=medium
+
+  * remove mail/use_rbl config - we use dnsbl_sites instead
+
+  * PMG/Config.pm - register/use format dnsbl-entry
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 27 Nov 2017 11:41:19 +0100
+
+pmg-api (5.0-17) unstable; urgency=medium
+
+  * support postfix tls policy map /etc/pmg/tls_policy
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 27 Nov 2017 06:45:41 +0100
+
+pmg-api (5.0-16) unstable; urgency=medium
+
+  * depend on clamdscan
+
+  * do not set postscreen_dnsbl_reply_map
+
+ -- Proxmox Support Team <support@proxmox.com>  Sat, 25 Nov 2017 09:36:02 +0100
+
+pmg-api (5.0-15) unstable; urgency=medium
+
+  * always load SA dkim to improve accuracy
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 24 Nov 2017 07:25:38 +0100
+
+pmg-api (5.0-14) unstable; urgency=medium
+
+  * pmgsync.service - run pmgconfig init to generate required files
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 21 Nov 2017 09:47:07 +0100
+
+pmg-api (5.0-13) unstable; urgency=medium
+
+  * add pmgsync service
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 21 Nov 2017 09:15:18 +0100
+
+pmg-api (5.0-12) unstable; urgency=medium
+
+  * debian/postinst - fix postgres service name (postgresql.service)
+  
+  * debian/postinst - do not use #DEBHELPER# macro inside comment
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 17 Nov 2017 11:30:26 +0100
+
+pmg-api (5.0-10) unstable; urgency=medium
+
+  * debian/postinst - do not skip service setup in /proxmox_install_mode
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 17 Nov 2017 09:31:32 +0100
+
+pmg-api (5.0-9) unstable; urgency=medium
+
+  * debian/pmgbanner.service - setup login banner
+
+  * templates/fetchmailrc.tt - fix syntax
+
+  * PMG/API2/APT.pm - fix package names
+
+  * PMG/Service/pmgproxy.pm - fix package names
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 14 Nov 2017 13:08:35 +0100
+
+pmg-api (5.0-8) unstable; urgency=medium
+
+  * rename package to pmg-api
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 14 Nov 2017 11:48:41 +0100
+
+proxmox-mailgateway (5.0-7) unstable; urgency=medium
+
+  * PMG/API2/SMTPWhitelist.pm - update postfix files after modifications
+
+  * PMG/Backup.pm - restore: keep directory /etc/pmg
+
+  * PMG/API2/Cluster.pm - use PMG::MailQueue::create_spooldirs
+
+  * PMG/API2/SMTPWhitelist.pm - fix delete object
+
+  * implement backup/restore
+
+  * PMG/API2/Cluster.pm - new option list_single_node
+
+  * improve permissions
+
+  * correct child link for the clamav api
+
+  * add spamassassin update api calls
+
+  * update spamassassin rules daily
+
+  * implement fetchmail api
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 14 Nov 2017 08:30:06 +0100
+
+proxmox-mailgateway (5.0-6) unstable; urgency=medium
+
+  * add date to the mail link for the verbose report
+
+  * implement fetchmail API
+
+  * add new LDAP group member api call
+
+  * implement missing rule database api calls
+
+  * implement user quarantine
+
+  * fix api call permissions
+
+  * add subscription api
+
+  * add apt api
+
+  * do not depend on clamav-unofficial-sigs
+
+  * implement mail tracker
+
+  * implement pmgqm - quarantine management tool
+
+  * improve statistic api
+
+  * countless other fixes and improvements
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 24 Oct 2017 08:30:23 +0200
+
+proxmox-mailgateway (5.0-5) unstable; urgency=medium
+
+  * improved database security
+
+  * implemented cluster tunnel daemon
+
+  * depend on sudo
+
+  * pmgcm: add 'sync' command
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 14 Apr 2017 07:26:53 +0200
+
+proxmox-mailgateway (5.0-4) unstable; urgency=medium
+
+  * improved cluster management API
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 10 Apr 2017 12:32:30 +0200
+
+proxmox-mailgateway (5.0-3) unstable; urgency=medium
+
+  * initial cluster management API
+
+  * ldap and user API
+
+  * mail queue APIL
+
+  * small fixes and improvements
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 05 Apr 2017 10:27:10 +0200
+
+proxmox-mailgateway (5.0-2) unstable; urgency=medium
+
+  * restart services after upgrade
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 24 Mar 2017 10:24:37 +0100
+
+proxmox-mailgateway (5.0-1) unstable; urgency=medium
+
+  * adjust version (so that we are higher than previous
+    proxmox-mailgateway release)
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 06 Mar 2017 11:04:03 +0100
+
+proxmox-mailgateway (1.0-1) unstable; urgency=medium
+
+  * imported from private repository
+
+ -- root <root@pmg5.maurer-it.com>  Tue, 24 Jan 2017 11:31:10 +0100
+

@@ -1,0 +1,41 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use PVE::Network;
+use Time::HiRes qw(usleep);
+
+my $xline = '-' x 78;
+
+my $banner = <<__EOBANNER;
+
+$xline
+
+Welcome to the Proxmox Mail Gateway. Please use your web browser to 
+configure this server - connect to:
+
+__EOBANNER
+
+my $addr;
+for (my $try = 1; $try <= 15; $try ++) {
+    # TODO, pass `all => 1` and print them? May be seen as "leak" for some users of unprotected setups?!
+    $addr = PVE::Network::get_local_ip();
+    last if defined($addr);
+
+    usleep($try * 150_000); # gradually increase poll, ensure's we're ready faster in average
+}
+
+$addr //= '<unknown>'; # useless but we must _not_ fail here
+
+$banner .= "  https://${addr}:8006/\n";
+
+$banner .= "\n$xline\n\n";
+
+open(my $issue_fh, '>', '/etc/issue') or die "cannot open '/etc/issue' for writing - $!";
+
+print $issue_fh $banner;
+
+close($issue_fh);
+
+exit (0);

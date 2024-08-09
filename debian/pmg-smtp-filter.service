@@ -1,0 +1,20 @@
+[Unit]
+Description=Proxmox SMTP Filter Daemon
+ConditionPathExists=/usr/bin/pmg-smtp-filter
+Wants=remote-fs.target
+After=remote-fs.target
+After=rrdcached.service
+Before=postfix.service
+
+[Service]
+ExecStart=/usr/bin/pmg-smtp-filter
+KillMode=mixed
+TimeoutStopSec=40
+ExecReload=/bin/kill -HUP $MAINPID
+PIDFile=/run/pmg-smtp-filter.pid
+Type=forking
+Restart=on-abort
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

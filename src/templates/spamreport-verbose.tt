@@ -1,0 +1,62 @@
+[%- IF timespan == 'week' -%]
+[%- SET title = "Weekly Spam Report for '${pmail}' - ${date}'" -%]
+[%- ELSE %]
+[%- SET title = "Daily Spam Report for '${pmail}' - ${date}" -%]
+[%- END -%]
+
+[% BLOCK tooltip %]Received: [% d.date %] [% d.time %]
+From: [% d.envelope_sender %]
+TO: [% d.receiver %]
+Size: [% d.bytes %]
+Score: [% d.spamlevel %]
+File: [% d.file %]
+[% END %]
+
+<html>
+  <head>
+    <title>[% title %]</title>
+  </head>
+  <body>
+
+    <div align=center>
+
+
+      <table width='100%'>
+	<tr>
+	  <td colspan=2>
+	    <div style='width:600px;'><h2>[% title %]</h2></div>
+	  </td>
+	</tr>
+
+	<tr><td colspan=2><hr></td></tr>
+
+	<!--start entries-->
+	[% FOREACH item IN items %]
+	<tr>
+	  <td>[% item.from %]</td>
+	  <td align=right nowrap>[% item.date %] [% item.time %]</td>
+	</tr>
+	<tr title='[% PROCESS tooltip d=item | html  %]'>
+	  <td><a style='cursor:pointer;' href='[% item.href | url %]'><b>[% item.subject %]</b></a></td>
+	  <td align=right nowrap>
+	    <div style='font-size:xx-small;'>
+	      <a href='[% item.href | url %]&action=whitelist'>Whitelist</a>&nbsp;
+	      <a href='[% item.href | url %]&action=blacklist'>Blacklist</a>&nbsp;
+	      <a href='[% item.href | url %]&action=deliver'>Deliver</a>&nbsp;
+	      <a href='[% item.href | url %]&action=delete'>Delete</a>
+	    </div>
+	  </td>
+	</tr>
+	<tr><td colspan=2><hr></td></tr>
+	[% END %]
+	<!--end entries-->
+
+      </table>
+
+      <p>Please use the <a href='[% managehref | url %]'>web interface</a> to manage your spam quarantine.</p>
+      <p>Powered by <a target=_blank href='http://www.proxmox.com'>Proxmox</a>.</p>
+
+    </div>
+
+  </body>
+</html>
